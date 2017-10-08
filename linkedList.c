@@ -1,24 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-// structure definitions
-// structure of a linked list node. It contains an integer element
-struct node
-{
-    int element;
-    struct node * next;
-};
-typedef struct node Node;
-
-/* structure of a linked list.
-in the list and also a pointer link to the first node of the list. */
- 
-// function declarations
-// Node *insertFirst (Node * head, int ele);  /* inserts a given element at the beginning of the list */
-// Node* deleteFirst(Node * head);  /* deletes the first element of the list and returns pointer to the deleted node. */
-// void traverse (Node * head);   prints all the elements in the list 
-// Node * deleteEnd(Node * head, int ele);  /*deletes the node in the list that contains the element = ele & if the element is not found it returns an error message saying not found*/
-// Node * insertEnd(Node* head,int data);
-//void insertNodeAtPos(Node* head,int data, int pos);
+#include "linkedList.h"
 
 void traverse(Node * head)
 {
@@ -172,6 +154,72 @@ Node *insertNodeAtPos(Node* head,int data,int pos)
     return head;
 }
 
+Node* formACycle(Node * head,int pos)
+{
+    Node *p=head;
+    Node *c=NULL;
+    int flag=0;
+    int pCount=1;
+    int t=0;
+    while(p->next!=NULL)
+    {
+        pCount++;
+        if(pCount==pos)
+        {
+            // printf("%d %d choi pos\n",choice, pos );
+            flag=1;
+            c=p;
+            t=pCount;
+        }
+        p=p->next;
+    }
+    if(flag==1)
+    {
+        p->next=c;
+    }
+    printf("Cycle is formed from the tail node to node %d\n",t);
+    // printf("%d is tot",t);
+    // printf("%d is pos\n",finPos);
+    return p;
+}
+
+void hasCycle(Node *head) 
+{
+    if(head!=NULL && head->next!=NULL)
+    {
+        
+        int n=0;
+        int flag=0;
+        Node *tor=head;
+        Node *rab=head->next;
+        int t=0;
+        // if(rab==tor)
+        while(rab->next!=NULL && rab->next->next!=NULL)
+        {
+             rab=rab->next->next;
+             tor=tor->next;
+             
+             n++;
+             
+             if(rab==tor)
+             {
+                flag=1;
+                break;
+             }
+        
+        }
+        // printf("flag is %d\n",flag );
+        //if(n==1)
+        //     return 1;
+        if(flag==1)
+        {    printf("Cycle is present\n");   }
+
+        else
+        {    printf("Cycle is not present\n");   }
+    }
+}
+
+
 int getChoice(int choice)
 {
     printf("-------------------\n");
@@ -182,6 +230,8 @@ int getChoice(int choice)
     printf("3: delete from the tail\n");
     printf("4: just print the list\n");
     printf("5: Insert at node you prefer\n");
+    printf("6: Form a cycle\n");
+    printf("7: Check for the existance of cycle\n");
     printf("-1: to exit\n");
     printf("-------------------\n");
 
@@ -190,64 +240,4 @@ int getChoice(int choice)
 
     scanf("%d",&choice);
     return choice;   
-}
-
-int main()
-{
-
-    //root=(struct node *)malloc(sizeof(struct node));
-    Node *head=NULL;
-    //root->left=NULL;
-    //root->right=NULL;
-    int N=0,p=0;
-    int choice=0;
-    
-    choice=getChoice(choice);   
-    while(choice!=-1)
-    {
-        if(choice==0)
-        {
-            printf("Enter the element to be added\n");
-            scanf("%d",&N);
-            head=insertFirst(head,N);
-            traverse(head); 
-        }
-        if(choice==1)
-        {
-         /* declare and allocate a new int pointer */
-            printf("Enter the element to be added\n");
-            scanf("%d",&N);
-            head=insertEnd(head,N);
-            traverse(head);
-            //printf("asd\n");
-        }
-        if(choice==2)
-        { 
-            printf("Deleting from head\n");
-            //traverse(head);
-            head=deleteFirst(head);
-            traverse(head);
-        }
-        if(choice==3)
-        {
-            printf("Deleting from the tail\n");
-            head=deleteEnd(head);
-            traverse(head);
-        }
-        if(choice==4)
-        {
-            traverse(head);
-        }
-        if(choice==5)
-        {
-            printf("Enter the element to be added\n");
-            scanf("%d",&N);
-            printf("Enter the position\n");
-            scanf("%d",&p);
-            head=insertNodeAtPos(head,N,p);
-            traverse(head);
-        }
-        choice=getChoice(choice);
-    }
-    return 0;
 }
